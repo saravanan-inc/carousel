@@ -1,8 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 function Header() {
+  const [auth, setAuth] = useState(false)
+  const history = useNavigate()
+
+  React.useEffect(() => {
+    setAuth(localStorage.getItem("userInfo") ? true : false)
+  },[history])
+
+  const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
+    localStorage.removeItem("userInfo")
+    setAuth(false)
+  }
+
   return (
     <Container>
       <Content>
@@ -12,7 +24,7 @@ function Header() {
         <Link to="/files-list">All-Files</Link>
       </Content>
       <Auth>
-        <Link to="/login">Login</Link>
+        {auth ? <Logout onClick={handleLogout}>Logout</Logout> : <Link to="/login">Login</Link> }
       </Auth>
     </Container>
   )
@@ -52,4 +64,8 @@ const Auth = styled.div`
     border: none;
     color: white;
   }
+`
+
+const Logout = styled.button`
+  
 `
