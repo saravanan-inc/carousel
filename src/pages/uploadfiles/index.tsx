@@ -1,17 +1,32 @@
 import React from 'react'
 import styled from 'styled-components'
+import Card from '../../components/card';
 
 function UploadFiles() {
+  const [files, setFiles] = React.useState<any[]>([]);
 
-  const handleChange = () => {
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    const arr = []
+    if (e.target.files) {
+      for (let i=0; i < e.target.files.length; i++) {
+        arr.push(e.target.files[i])
+      }
+    }
+    setFiles(arr);
+    console.log(arr);
+    
   }
   return (
     <Container>
       <Content>
         <h1>Drag and drop files here to upload</h1>
-        <input type="file" name="upload-file" id="upload-file" />
+        <input onChange={handleChange} type="file" name="upload-file" id="upload-file" multiple />
       </Content>
+      
+      {files?.map((file)=> (
+        <Card name={file.name} size={file.size} type={file.type} upload_date={file.lastModified} />
+      ))}
     </Container>
   )
 }
