@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Card from '../../components/card';
+import { server } from '../../utils/axios';
 
 function UploadFiles() {
   const [files, setFiles] = React.useState<any[]>([]);
@@ -14,19 +15,35 @@ function UploadFiles() {
       }
     }
     setFiles(arr);
-    console.log(arr);
-    
   }
+
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const req = {
+      name: files[0].name,
+      images_url: files[0],
+      description: ""
+    }
+
+    const { data } = await server.post("upload", {
+      "file": req
+    })
+    console.log(data);
+  };
   return (
     <Container>
-      <Content>
-        <h1>Drag and drop files here to upload</h1>
-        <input onChange={handleChange} type="file" name="upload-file" id="upload-file" multiple />
-      </Content>
-      
-      {files?.map((file)=> (
-        <Card name={file.name} size={file.size} type={file.type} upload_date={file.lastModified} />
-      ))}
+      <form onSubmit={handleSubmit}>
+        <Content>
+          <h1>Drag and drop files here to upload</h1>
+          <input onChange={handleChange} type="file" name="upload-file" id="upload-file" multiple required />
+        </Content>
+        
+        {files?.map((file)=> (
+          <Card name={file.name} size={file.size} type={file.type} upload_date={file.lastModified} />
+        ))}
+
+        <Button type="submit">Upload</Button>
+      </form>
     </Container>
   )
 }
@@ -56,4 +73,14 @@ const Content = styled.div`
     border: none;
     color: black;
   }
+`
+
+const Button = styled.button`
+  background-color: rgba(0,0,0,.1);
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  width: 100%;
 `

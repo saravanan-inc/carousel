@@ -1,13 +1,27 @@
 import React from 'react'
 import styled from 'styled-components';
+import { server } from '../../utils/axios';
 
 function Dashboard() {
+  const [carousels, setCarousels] = React.useState<any>([])
+  const [index, setIndex] = React.useState(0)
+  
+  React.useEffect(() => {
+    async function getCarousels() {
+      const { data: { carousel_images } } = await server.get("carousel");
+      setCarousels(carousel_images)
+    }
+    getCarousels();
+  }, [])
+
   const showPrevious = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
+    setIndex((index+1)%carousels.length)
   }
 
   const showNext = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
+    return setIndex(index === 0 ? carousels.length-1 : index-1)
   }
   return (
     <>
@@ -16,17 +30,17 @@ function Dashboard() {
           <button onClick={showPrevious}>&#10162;</button>
         </Previous>
         <Content>
-          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" />
-          <img src="https://images.unsplash.com/photo-1496065187959-7f07b8353c55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" />
+          <img src={carousels[index]?.image_link} alt={carousels[index]?.title} />
+          <img src={carousels[(index+1)%carousels.length]?.image_link} alt={carousels[index]?.title} />
         </Content>
         <Next>
           <button onClick={showNext}>&#10162;</button>
         </Next>
       </Container>
+
       <DotButton>
-        <span data-active="1"></span>
-        <span></span>
-        <span></span>
+        <span data-active={index < 1 ? "1" : "0"}></span>
+        <span data-active={index > 1 ? "1" : "0"}></span>
       </DotButton>
     </>
   )
@@ -38,6 +52,9 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  margin-top: 1rem;
+  background-color: #747E7E;
+  border-radius: 1rem;
 
   button {
     background-color: #747E7E;
@@ -50,11 +67,25 @@ const Container = styled.div`
 
 const Content = styled.div`
   display: flex;
+  -webkit-transition: all 3s 0s ease;
+  -moz-transition: all 3s 0s ease;
+  -o-transition: all 3s 0s ease;
+  transition: all 3s 0s ease;
+
   img {
     width: 49%;
     border-radius: 1rem;
     margin: .5%;
     object-fit: contain;
+    aspect-ratio: 16/9;
+    height: 350px;
+    animation: fadeIn 5s; 
+    transition: cubic-bezier(1, 0, 0, 1);
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
   }
 `
 
