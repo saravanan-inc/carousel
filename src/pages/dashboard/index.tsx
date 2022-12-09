@@ -77,7 +77,7 @@ const DotButton = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: .5rem;
-
+  
   span {
     width: .5rem;
     height: .5rem;
