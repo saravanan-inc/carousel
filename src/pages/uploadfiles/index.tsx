@@ -19,14 +19,14 @@ function UploadFiles() {
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const req = {
-      name: files[0].name,
-      images_url: files[0],
-      description: ""
-    }
+    // const req = {
+    //   name: files[0].name,
+    //   images_url: files[0],
+    //   description: ""
+    // }
 
     const { data } = await server.post("upload", {
-      "file": req
+      "file": [...files]
     })
     console.log(data);
   };
