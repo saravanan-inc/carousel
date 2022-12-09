@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './App.css';
+import styled from 'styled-components';
+import Header from './components/header';
 import Auth from './pages/auth';
 import Dashboard from './pages/dashboard';
 import File from './pages/files';
@@ -8,8 +9,9 @@ import UploadFiles from './pages/uploadfiles';
 
 function App() {
   return (
-    <div className="App">
+    <Container>
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path="/" element={<h1>Welcome</h1>} />
           <Route path="/login" element={<Auth />} />
@@ -19,8 +21,13 @@ function App() {
           <Route path="/files/:id" element={<File />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </Container>
   );
 }
 
 export default App;
+
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`
