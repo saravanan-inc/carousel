@@ -81,6 +81,10 @@ const Content = styled.div`
     height: 350px;
     animation: fadeIn 5s; 
     transition: cubic-bezier(1, 0, 0, 1);
+    border-radius: 14px;
+    background: linear-gradient(145deg, #cacaca, #f0f0f0);
+    box-shadow:  5px 5px 100px #5a5a5a,
+                -5px -5px 100px #ffffff;
   }
 
   @keyframes fadeIn {
